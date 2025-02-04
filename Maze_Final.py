@@ -1,3 +1,4 @@
+#อันนี้ไม่ไช่ final จริงนะครับมันวาป
 import os
 import time
 from Stack import Stack
