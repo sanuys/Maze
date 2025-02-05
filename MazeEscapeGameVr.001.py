@@ -1,5 +1,6 @@
 import tkinter as tk
 import time
+import keyboard
 from Stack import Stack
 
 class MazeApp:
