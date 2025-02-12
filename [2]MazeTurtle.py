@@ -111,7 +111,7 @@ def search_from(maze, start_row, start_column):
 
 
 # โหลดเขาวงกตและเริ่มค้นหาเส้นทาง
-my_maze = Maze('maze1.txt')
+my_maze = Maze('maze2.txt')
 my_maze.draw_maze()
 my_maze.update_position(my_maze.start_row, my_maze.start_col)
 search_from(my_maze, my_maze.start_row, my_maze.start_col)

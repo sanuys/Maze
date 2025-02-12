@@ -1,4 +1,5 @@
 import os
+import msvcrt
 import time
 from Stack import Stack
 
@@ -11,11 +12,10 @@ class maze:
             ["X", " ", "X", " ", "X", " ", "X"],
             ["X", " ", " ", " ", "X", "X", "X"],
             ["X", " ", "X", " ", " ", " ", "X"],
-            ["X", " ", "X", "X", "X", "X", "X"]  # จุดเริ่มต้น
+            ["X", "O", "X", "X", "X", "X", "X"]
         ]
-        self.ply = pos(6, 1)  # จุดเริ่มต้น 
-        self.end = pos(2, 6)  # จุดสิ้นสุด
-        self.maze[self.ply.y][self.ply.x] = "O"
+        self.ply = pos(6, 1)  
+        self.end = pos(2, 6)  
         self.maze[self.end.y][self.end.x] = "E"
         self.directions = {1: (-1, 0), 2: (1, 0), 3: (0, -1), 4: (0, 1)}
 
@@ -24,10 +24,10 @@ class maze:
 
     def print(self):
         os.system("cls" if os.name == "nt" else "clear")
-        print("\n\n\n")
+        print("_" * 30)
         for row in self.maze:
             print(" ".join(row))
-        print("\n\n\n")
+        print("_" * 30)
 
     def printEND(self):
         os.system("cls" if os.name == "nt" else "clear")
@@ -39,12 +39,12 @@ class maze:
         stack = Stack()
         stack.push((self.ply.y, self.ply.x))  
         visited = set()  
-        path = []  # เก็บเส้นทางที่เดินผ่านมา
+        path = []  
 
         while not stack.isEmpty():
             current_y, current_x = stack.pop()
             self.ply.y, self.ply.x = current_y, current_x  
-            self.maze[current_y][current_x] = "O"  # วาง "O" ที่ตำแหน่งปัจจุบัน
+            self.maze[current_y][current_x] = "O"
             self.print()
             time.sleep(0.25)
 
@@ -55,7 +55,7 @@ class maze:
             visited.add((current_y, current_x))
             possible_moves = []
 
-            for direction in [1, 2, 3, 4]:  # ตรวจสอบ 4 ทิศทาง
+            for direction in [1, 2, 3, 4]:
                 dy, dx = self.directions[direction]
                 next_y, next_x = current_y + dy, current_x + dx
 
@@ -66,16 +66,14 @@ class maze:
             if possible_moves:
                 for move in possible_moves:
                     stack.push(move)
-                # เปลี่ยนตำแหน่งก่อนหน้าของ "O" ให้เป็น "."
                 if path:
                     prev_y, prev_x = path[-1]
                     self.maze[prev_y][prev_x] = "."
                 path.append((current_y, current_x))
             else:
-                # ไม่มีทางไป → ลบ "." ทั้งหมดที่เป็น Dead-end และย้อนกลับ
                 while path:
                     back_y, back_x = path.pop()
-                    self.maze[back_y][back_x] = " "  # เปลี่ยนกลับเป็น " "
+                    self.maze[back_y][back_x] = " "  
                     self.print()
                     time.sleep(0.1)
                     if any(
@@ -83,7 +81,7 @@ class maze:
                         self.maze[back_y + dy][back_x + dx] in [" ", "E"]
                         for dy, dx in self.directions.values()
                     ):
-                        break  # หยุดย้อนกลับถ้าพบทางใหม่
+                        break  
 
         print("No path to the exit.")
         return False
@@ -98,4 +96,10 @@ class pos:
 if __name__ == '__main__':
     m = maze()
     m.print()
-    m.Visited()  # เรียกใช้ฟังก์ชันเพื่อให้ "O" เดินออกจากเขาวงกต
+    m.Visited()  
+    print("Press any key to continue...")
+    key = msvcrt.getch()
+    try:
+        print(f"You pressed: {key.decode('utf-8')}")
+    except UnicodeDecodeError:
+        print(f"You pressed: {key}")
