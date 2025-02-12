@@ -1,1 +1,1 @@
-python [1]Maze.py
+python [1]Maze_Solver.py
